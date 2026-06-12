@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Data Governance Plan - Aurora Tech</title>
+<style>
+  body { font-family: 'Times New Roman', Times, serif; background: #e2e8f0; color: #1e293b; padding: 40px; display: flex; justify-content: center; }
+  .document { background: white; padding: 80px; max-width: 800px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); line-height: 1.6; }
+  h1 { text-align: center; border-bottom: 2px solid #334155; padding-bottom: 20px; text-transform: uppercase; }
+  h2 { color: #334155; margin-top: 40px; border-bottom: 1px solid #cbd5e1; padding-bottom: 8px; }
+  h3 { color: #475569; margin-top: 25px; }
+  p { text-align: justify; }
+  .cover { height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; border-bottom: 1px solid #ccc; margin-bottom: 40px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 20px; }
+  th, td { border: 1px solid #cbd5e1; padding: 10px; text-align: left; }
+  th { background: #f1f5f9; }
+  .note { background: #f8fafc; border-left: 4px solid #4f46e5; padding: 15px; margin: 20px 0; font-style: italic; }
+  ul { padding-left: 20px; }
+  li { margin-bottom: 8px; }
+</style>
+</head>
+<body>
+  <div class="document">
+    <div class="cover">
+        <h1>Master Data Governance Policy</h1>
+        <h2>Aurora Tech Computing Group</h2>
+        <p><strong>Project Code:</strong> Atomic-Link</p>
+        <p><strong>Prepared By:</strong> Lead AI & Data Architect</p>
+        <p><strong>Date:</strong> June 2026</p>
+        <p><strong>Classification:</strong> STRICTLY CONFIDENTIAL</p>
+    </div>
+
+    <h2>Section 1: Executive Summary & Vision</h2>
+    <p>Aurora Tech Computing Group is a Paris-based multinational technology manufacturer specializing in the assembly and global distribution of high-performance Google Chromebooks. The company operates in a highly volatile maritime supply chain environment, sourcing premium semiconductor components (e.g., TSMC processors, NVIDIA GPUs, and AUO display panels) primarily from the Asia-Pacific region (Taiwan, South Korea, Japan).</p>
+    <p>Aurora Tech's flagship product, the "Chromebook Pro-X," retails at €699 with a baseline Bill of Materials (BOM) cost of €450, generating an ideal profit margin of ~8% (€55.90 per unit). The vision of this Data Governance Plan is to unify financial and supply-chain data across global subsidiaries, establishing a Single Source of Truth (SSOT) to eliminate manual errors and protect net profit margins from severe currency and delay exposure.</p>
+
+    <h2>Section 2: Scope & Objectives</h2>
+    <p>The scope of Project Atomic-Link focuses strictly on two critical data domains: Financial exchange rates (specifically EUR/USD and EUR/TWD currency pairs) and Inbound Logistics telemetry data (shipping schedules, carrier modes, and delay days). The business units directly impacted include the Finance Division and the Global Supply Chain Division.</p>
+    <p>The core objective of this project is to achieve 100% automated integration of daily financial exchange rates and shipping tracking data, feeding directly into the MLOps pipeline. This will eliminate manual overrides, reduce data reconciliation closing cycle times, and support automated strategic business responses (such as ocean-to-air freight rerouting or automated ERP hedging PO triggers).</p>
+
+    <h2>Section 3: Operating Model & Roles</h2>
+    <p>Accountability is formalized using a strict RACI (Responsible, Accountable, Consulted, Informed) matrix managed by a central three-tier operating model:</p>
+    <ul>
+        <li><strong>Data Governance Council (DGC):</strong> Composed of the CFO, VP of Supply Chain, and Chief Data Officer. The DGC holds supreme decision-making authority, resolving cross-departmental data silos and authorizing budgets.</li>
+        <li><strong>Data Owners:</strong> Business leaders (Finance Director & VP of Supply Chain) who are accountable for defining access controls, data quality thresholds, and business glossaries for their respective domains.</li>
+        <li><strong>Data Stewards:</strong> Data Analysts and AI Engineers who are responsible for implementing data quality checks, managing metadata catalogs, and maintaining the automated ETL pipelines daily.</li>
+    </ul>
+
+    <table>
+        <tr>
+            <th>Data Domain</th>
+            <th>Accountable (A)</th>
+            <th>Responsible (R)</th>
+            <th>Consulted (C)</th>
+            <th>Informed (I)</th>
+        </tr>
+        <tr>
+            <td><strong>FX Rates (API)</strong></td>
+            <td>Chief Financial Officer (CFO)</td>
+            <td>Financial Controller</td>
+            <td>AI Data Engineers</td>
+            <td>Procurement Team</td>
+        </tr>
+        <tr>
+            <td><strong>Maritime Logistics</strong></td>
+            <td>VP Supply Chain</td>
+            <td>Logistics Planner</td>
+            <td>MLOps Admins</td>
+            <td>Warehouse Managers</td>
+        </tr>
+        <tr>
+            <td><strong>AI Pipelines & Security</strong></td>
+            <td>Chief Data Officer (CDO)</td>
+            <td>Lead Cloud Architect</td>
+            <td>Legal / DPO</td>
+            <td>Executive Board</td>
+        </tr>
+    </table>
+
+    <h2>Section 4: Policies & Standards</h2>
+    <p>To secure our data warehouse and prevent data leakage or poisoning, the DGC enforces three core policies:</p>
+    <ul>
+        <li><strong>Rule 1 (Data Quality Ingestion):</strong> All production systems must fetch daily exchange rates automatically from the Frankfurter API at exactly 16:00 CET. Manually inputted rates are strictly forbidden.</li>
+        <li><strong>Rule 2 (Data Security & Cryptography):</strong> Role-Based Access Control (RBAC) is enforced at the database level. Supplier pricing, component costs, and PII must be encrypted at rest using AES-256 and in transit via TLS.</li>
+        <li><strong>Rule 3 (Data Classification Standards):</strong>
+            <ul>
+                <li><em>Tier 1 (Public):</em> Public FX ECB reference rates. No encryption required.</li>
+                <li><em>Tier 2 (Internal Business Data):</em> Anonymized logistics delays, aggregate shipping KPIs.</li>
+                <li><em>Tier 3 (Confidential):</em> Supplier pricing, component BOM costs, and employee/driver PII.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h2>Section 5: Processes & Workflows</h2>
+    <h3>5.1 Data Quality & Issue Handling</h3>
+    <p>To sustain a Single Source of Truth, all incoming rates from the Frankfurter API must undergo automated validation anomaly checks. If a daily rate fluctuates by more than &plusmn;5% compared to a 7-day moving average, the rate is quarantined in a temporary staging schema, and an automated incident ticket is generated in Jira.</p>
+    <p>The Technical Data Steward is automatically alerted within 15 minutes. If the anomaly is a false positive (e.g., extreme macroeconomic volatility), the Data Owner (Group Report Controller) must electronically sign off to authorize the release into production.</p>
+
+    <h3>5.2 Metadata & Master Data Management (MDM)</h3>
+    <p>Aurora Tech establishes a centralized Business Glossary to unify definitions across all regions. "Net Margin" is uniformly defined group-wide as: <code>(Revenue - BOM Cost - Freight Inbound) / Revenue</code>.</p>
+    <p>Every data asset within the PostgreSQL pipeline must be tagged with a distinct SKU-like inventory metadata tag (e.g., FIN-FX-EUR-TWD) to map data lineage from origin API to the final dashboard.</p>
+
+    <h2>Section 6: Technology & Architecture</h2>
+    <h3>6.1 Enterprise Data Infrastructure</h3>
+    <p>The data platform architecture leverages an enterprise-grade PostgreSQL relational database structured in an optimized Star Schema. This structure denormalizes analytical data to reduce complex joins during AI feature extraction, ensuring rapid querying while maintaining absolute logical data isolation.</p>
+    <p>The schema centers on a central <code>fact_supplychain_transactions</code> table containing transaction keys, currency rates, components, delay days, and freight costs. This links to dimensions for suppliers, products, currencies, and dates.</p>
+
+    <h3>6.2 Security, Lineage, and Web3 Guardrails</h3>
+    <p>In preparation for the strategic scaling path introducing Web3 USDC automated settlement, a strict cryptographic hashing abstraction layer is placed between the PostgreSQL database and the corporate wallet. No proprietary vendor pricing or employee PII enters the public blockchain; only hashed unique transaction IDs are stored on-chain to maintain absolute GDPR compliance.</p>
+
+    <h2>Section 7: Metrics & KPIs</h2>
+    <p>To meet the official evaluation standard (Regular Compliance Audits), success will be measured through quarterly data audits using three primary Key Performance Indicators:</p>
+    <table>
+        <tr>
+            <th>KPI Category</th>
+            <th>Metric Name</th>
+            <th>Definition & Target</th>
+        </tr>
+        <tr>
+            <td><strong>Data Quality</strong></td>
+            <td>FX Data Accuracy Rate</td>
+            <td>Percentage of automated financial reports utilizing the unified Frankfurter SSOT. Target: 100%.</td>
+        </tr>
+        <tr>
+            <td><strong>Operational Efficiency</strong></td>
+            <td>Data Reconciliation Time</td>
+            <td>Average hours spent by controllers manually adjusting currency mismatches per closing cycle. Target: &lt; 2 hours (Reduction of 80%).</td>
+        </tr>
+        <tr>
+            <td><strong>Compliance & Safety</strong></td>
+            <td>GDPR/PII Audit Score</td>
+            <td>Incidents of unencrypted supplier PII or component pricing exposed outside authorized RBAC. Target: 0 Incidents.</td>
+        </tr>
+    </table>
+
+    <h2>Section 8: Roadmap & Change Management</h2>
+    <h3>8.1 Phased Implementation Timeline</h3>
+    <ul>
+        <li><strong>Phase 1: Foundation (Month 1):</strong> Deploy the PostgreSQL Star Schema database, connect the Frankfurter API pipeline, and freeze the global Business Glossary definitions.</li>
+        <li><strong>Phase 2: Pilot Deployment (Month 2):</strong> Launch the data governance protocol exclusively within the Inbound Logistics & Financial Controlling units (tracking Air France cargo data vs consolidation exchange rates).</li>
+        <li><strong>Phase 3: Global Rollout (Month 3):</strong> Scale the architecture to all global manufacturing hubs and activate pre-auditing for the Web3 USDC settlement module.</li>
+    </ul>
+
+    <h3>8.2 Change Management, Adoption, & Inclusive Training</h3>
+    <p>To prevent friction from operational staff accustomed to legacy manual Excel sheets, the DGC will launch a Data Democratization Initiative. Operational users will be provided with simplified Power BI dashboards, proving that the new governed workflow reduces their daily double-entry workload.</p>
+    <p>A group-wide data awareness program will be delivered via an internal portal complying fully with W3C WCAG 2.1 Level AA. Technical documentation will feature high-contrast themes and alt-text compatibility for screen readers, while video walk-throughs of the new data ticketing process will provide synchronized captioning, ensuring complete professional inclusion for staff with visual or hearing impairments.</p>
+  </div>
+</body>
+</html>
