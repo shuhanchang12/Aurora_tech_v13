@@ -87,7 +87,7 @@ export default function Bloc3PipelinesDemo() {
         <InteractiveDemoPlayer 
             title="Loom Simulation: Real-Time Pipelines" 
             steps={steps} 
-            accentColor="amber" 
+            accentColor="indigo" 
         />
     );
 }

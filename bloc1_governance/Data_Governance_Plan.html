@@ -31,7 +31,8 @@
     </div>
 
     <h2>Section 1: Executive Summary & Vision</h2>
-    <p>Aurora Tech Computing Group is a Paris-based multinational technology manufacturer specializing in the assembly and global distribution of high-performance Google Chromebooks. The company operates in a highly volatile maritime supply chain environment, sourcing premium semiconductor components (e.g., TSMC processors, NVIDIA GPUs, and AUO display panels) primarily from the Asia-Pacific region (Taiwan, South Korea, Japan).</p>
+    <p>Aurora Tech Computing Group is a Paris-based technology manufacturer specializing in the assembly and global distribution of high-performance Google Chromebooks. The company operates in a highly volatile maritime supply chain environment, sourcing premium semiconductor components (e.g., TSMC processors, NVIDIA GPUs, and AUO display panels) primarily from the Asia-Pacific region (Taiwan, South Korea, Japan).</p>
+    <p><strong>Regional Sales & Supply Localization:</strong> Because Aurora Tech operates globally, it sells and procures differently in different countries. In Taiwan, component sourcing relies on direct vendor contracts with specific hardware manufacturers, whereas in Europe, Chromebook distribution is integrated into localized public-sector school tenders and commercial sales channels, each governed by different tax structures, compliance mandates, and localized currency settings. Unifying these disparate regional models under a central governance policy is critical.</p>
     <p>Aurora Tech's flagship product, the "Chromebook Pro-X," retails at €699 with a baseline Bill of Materials (BOM) cost of €450, generating an ideal profit margin of ~8% (€55.90 per unit). The vision of this Data Governance Plan is to unify financial and supply-chain data across global subsidiaries, establishing a Single Source of Truth (SSOT) to eliminate manual errors and protect net profit margins from severe currency and delay exposure.</p>
 
     <h2>Section 2: Scope & Objectives</h2>
@@ -78,7 +79,7 @@
     </table>
 
     <h2>Section 4: Policies & Standards</h2>
-    <p>To secure our data warehouse and prevent data leakage or poisoning, the DGC enforces three core policies:</p>
+    <p>To secure our data warehouse and prevent data leakage or poisoning, the DGC enforces the following core policies:</p>
     <ul>
         <li><strong>Rule 1 (Data Quality Ingestion):</strong> All production systems must fetch daily exchange rates automatically from the Frankfurter API at exactly 16:00 CET. Manually inputted rates are strictly forbidden.</li>
         <li><strong>Rule 2 (Data Security & Cryptography):</strong> Role-Based Access Control (RBAC) is enforced at the database level. Supplier pricing, component costs, and PII must be encrypted at rest using AES-256 and in transit via TLS.</li>
@@ -89,6 +90,9 @@
                 <li><em>Tier 3 (Confidential):</em> Supplier pricing, component BOM costs, and employee/driver PII.</li>
             </ul>
         </li>
+        <li><strong>Rule 4 (AI & Copilot Usage Policy):</strong> Generative AI tools and coding copilots are strictly prohibited from generating official audited data governance policies or compliance reports. When used for code generation or analysis, developers must ensure that no corporate customer PII or proprietary BOM pricing details are uploaded to public AI endpoints.</li>
+        <li><strong>Rule 5 (Bias Avoidance & Non-Discriminatory Logic):</strong> All MLOps classification logic must rely strictly on objective, non-biased operational attributes (e.g. shipping days, mode of transport, and currency exchange values). Demographic, geographic, or carrier factors that could introduce systemic bias are strictly excluded.</li>
+        <li><strong>Rule 6 (ISO Date Standardization):</strong> To ensure seamless data synchronization across localized systems, all dates ingested into the data lake and processed through PostgreSQL must strictly conform to the <strong>ISO 8601 date format</strong> (e.g., <code>YYYY-MM-DD</code>).</li>
     </ul>
 
     <h2>Section 5: Processes & Workflows</h2>
@@ -107,9 +111,10 @@
 
     <h3>6.2 Security, Lineage, and Web3 Guardrails</h3>
     <p>In preparation for the strategic scaling path introducing Web3 USDC automated settlement, a strict cryptographic hashing abstraction layer is placed between the PostgreSQL database and the corporate wallet. No proprietary vendor pricing or employee PII enters the public blockchain; only hashed unique transaction IDs are stored on-chain to maintain absolute GDPR compliance.</p>
+    <p><strong>VPN Access Restriction:</strong> All transactional database engines, API deployment gateways, and administrative interfaces are hosted within a closed Virtual Private Network (VPN). Sensitive corporate data and model monitoring portals can only be accessed by authenticated personnel while connected to the corporate VPN.</p>
 
     <h2>Section 7: Metrics & KPIs</h2>
-    <p>To meet the official evaluation standard (Regular Compliance Audits), success will be measured through quarterly data audits using three primary Key Performance Indicators:</p>
+    <p>To meet the official evaluation standard (Regular Compliance Audits), success will be measured through quarterly data audits using Key Performance Indicators, alongside our Data Governance Maturity Model scoring:</p>
     <table>
         <tr>
             <th>KPI Category</th>
@@ -119,7 +124,7 @@
         <tr>
             <td><strong>Data Quality</strong></td>
             <td>FX Data Accuracy Rate</td>
-            <td>Percentage of automated financial reports utilizing the unified Frankfurter SSOT. Target: 100%.</td>
+            <td>Percentage of automated financial reports utilizing the unified Frankfurter SSOT in ISO date format. Target: 100%.</td>
         </tr>
         <tr>
             <td><strong>Operational Efficiency</strong></td>
@@ -129,7 +134,12 @@
         <tr>
             <td><strong>Compliance & Safety</strong></td>
             <td>GDPR/PII Audit Score</td>
-            <td>Incidents of unencrypted supplier PII or component pricing exposed outside authorized RBAC. Target: 0 Incidents.</td>
+            <td>Incidents of unencrypted supplier PII or component pricing exposed outside authorized RBAC or VPN. Target: 0 Incidents.</td>
+        </tr>
+        <tr>
+            <td><strong>Governance Maturity</strong></td>
+            <td>CMMI Maturity Rating</td>
+            <td>Data Governance maturity score measured on a 1-5 scale. Target: Move from Level 2 (Managed) to Level 4 (Quantitatively Controlled) in 12 months.</td>
         </tr>
     </table>
 

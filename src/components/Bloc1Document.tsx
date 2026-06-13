@@ -280,6 +280,5 @@ export default function Bloc1Document() {
                     -- End of Official Written Deliverable - Aurora Tech Board Council --
                 </div>
             </div>
-        </div>
     );
 }

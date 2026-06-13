@@ -200,7 +200,7 @@ export const DeliverableViewer = ({
 
         // Fallback Content Slide (if no valid HTML slides found)
         const slide2 = pres.addSlide();
-        slide2.addText("Agenda & Overview", { x: 0.5, y: 0.5, w: 9, h: 1, fontSize: 32, bold: true, color: "0B2447", border: { type: "none", pt: 1 } });
+        slide2.addText("Agenda & Overview", { x: 0.5, y: 0.5, w: 9, h: 1, fontSize: 32, bold: true, color: "0B2447" });
         
         let contentItems = [];
         if (title.includes('Governance')) {
