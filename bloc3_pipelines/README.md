@@ -25,8 +25,11 @@ graph TD
 ```
 
 ## 📊 Data Sources & Lineage
-- **Financial SSOT:** Real-time exchange rates automated via [Frankfurter API](https://www.frankfurter.app/).
-- **Model Training Baseline:** Initial Random Forest features optimized using [Kaggle Laptop Price Dataset](https://www.kaggle.com/datasets/muhammetvarl/laptop-price) and [Kaggle Electronic Sales Dataset](https://www.kaggle.com/datasets/cameronseamons/electronic-sales-sep2023-sep2024).
+- **Cold Start Baseline (Historical Data Bootstrapping):**
+  - **Financial Baseline:** Initial currency rates initialized via [Frankfurter API](https://www.frankfurter.app/).
+  - **Logistics & Product Baseline:** Random Forest model baseline optimized using the [Kaggle Laptop Price Dataset](https://www.kaggle.com/datasets/muhammetvarl/laptop-price) and the [Kaggle Electronic Sales Dataset](https://www.kaggle.com/datasets/cameronseamons/electronic-sales-sep2023-sep2024) (with full GDPR compliance mapping).
+- **Live Operational Pipelines (Daily Ingestion):**
+  - Apache Airflow dynamically triggers daily tasks, pulling real-time exchange rates from the Frankfurter API and simulated logistics telemetry to continuously monitor current margin risk in the data warehouse.
 
 ## How to Run & Deploy
 1. **Airflow Deployment**: Place `dags/auroratech_pipeline.py` into your Airflow `$AIRFLOW_HOME/dags` folder.

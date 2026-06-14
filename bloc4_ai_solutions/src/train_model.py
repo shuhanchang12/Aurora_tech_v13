@@ -24,6 +24,17 @@ def fetch_and_adapt_dataco():
     laptops = pd.read_csv(laptop_path, encoding='latin-1')
     sales = pd.read_csv(sales_path)
     
+    # GDPR Compliance & Data Anonymization
+    # 1. Drop client PII (Age, Gender) to prevent storing identifying details in the DW
+    if 'Age' in sales.columns:
+        sales = sales.drop(columns=['Age', 'Gender'], errors='ignore')
+        print("GDPR Compliance: Dropped client PII columns (Age, Gender).")
+    # 2. Pseudonymize Customer ID using SHA-256 hashing
+    if 'Customer ID' in sales.columns:
+        import hashlib
+        sales['Customer ID'] = sales['Customer ID'].apply(lambda x: hashlib.sha256(str(x).encode()).hexdigest()[:12])
+        print("GDPR Compliance: Anonymized Customer ID using SHA-256.")
+        
     # Connect them: assign a random Chromebook / laptop to each sales transaction
     np.random.seed(42)
     random_laptops = laptops.sample(n=len(sales), replace=True, random_state=42).reset_index(drop=True)

@@ -29,6 +29,16 @@ services:
     networks:
       - data-bridge
 
+  prometheus:
+    image: prom/prometheus:v2.44.0
+    container_name: auroratech-prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - data-bridge
+
   grafana:
     image: grafana/grafana:9.5.2
     container_name: auroratech-grafana
