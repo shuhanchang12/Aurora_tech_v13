@@ -1,0 +1,63 @@
+name: Aurora Tech CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  frontend_build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
+  bloc3_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Bloc 3 test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r bloc3_pipelines/requirements.txt
+
+      - name: Run Bloc 3 tests
+        working-directory: bloc3_pipelines
+        run: pytest tests/
+
+  bloc4_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Bloc 4 dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r bloc4_ai_solutions/requirements.txt
+
+      - name: Run Bloc 4 tests
+        working-directory: bloc4_ai_solutions
+        run: pytest tests/

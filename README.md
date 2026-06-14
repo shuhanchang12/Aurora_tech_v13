@@ -11,7 +11,7 @@
 - **Infrastructure (Bloc 2):** Docker, Terraform, PostgreSQL (Star Schema).
 - **Data Pipelines (Bloc 3):** Apache Airflow, dbt, Python, Frankfurter API.
 - **AI & MLOps (Bloc 4):** Scikit-Learn (Random Forest), FastAPI, GitHub Actions (CI/CD).
-- **Frontend & ERP Integration:** Streamlit, Simulated Banking Gateway Hooks.
+- **Frontend & ERP Integration:** React, Vite, Simulated Banking Gateway Hooks.
 
 ---
 
@@ -62,7 +62,7 @@ Automated data ingestion from disparate architectural endpoints.
 
 ### 📂 `/bloc4_ai_solutions` (Machine Learning & MLOps)
 The predictive engine and operationalized AI services.
-* **Artifacts:** `RandomForestClassifier` training scripts, FastAPI real-time inference server (`/predict`), Streamlit Executive Dashboard.
+* **Artifacts:** `RandomForestClassifier` training scripts, FastAPI real-time inference server (`/predict-margin-risk`), React Executive Dashboard.
 * **Focus:** Serving real-time margin risk predictions via API and monitoring deployed model metrics (MLOps).
 
 ---
@@ -77,14 +77,18 @@ To boot up the core pipeline and interface locally:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/shuhanchang12/Aurora_tech_v13.git
-cd Aurora_tech_v13
+git clone <your-repo-url>
+cd aurora_tech_v11
 
-# 2. Boot up the infrastructure (PostgreSQL, FastAPI, Dashboard)
+# 2. Install the frontend dependencies and start the dashboard
+npm install
+npm run dev
+
+# 3. Boot up the infrastructure (PostgreSQL, FastAPI)
 cd bloc2_architecture
 docker-compose up -d --build
 
-# 3. Access the interfaces
+# 4. Access the interfaces
+# • Frontend dashboard: http://localhost:3000
 # • FastAPI Swagger UI: http://localhost:8000/docs
-# • Executive Dashboard: http://localhost:8501
 ```

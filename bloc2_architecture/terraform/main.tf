@@ -2,6 +2,12 @@ provider "aws" {
   region = "eu-west-1"
 }
 
+variable "db_password" {
+  description = "Database administrator password for the Aurora Tech PostgreSQL instance"
+  type        = string
+  sensitive   = true
+}
+
 resource "aws_db_instance" "postgres_dwh" {
   allocated_storage    = 100
   storage_type         = "gp3"
@@ -10,7 +16,7 @@ resource "aws_db_instance" "postgres_dwh" {
   instance_class       = "db.t3.medium"
   identifier           = "auroratech-prod-dwh"
   username             = "admin"
-  password             = "securepassword123"
+  password             = var.db_password
   parameter_group_name = "default.postgres15"
   skip_final_snapshot  = true
   publicly_accessible  = false

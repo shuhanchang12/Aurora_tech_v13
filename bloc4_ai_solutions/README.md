@@ -4,7 +4,7 @@
 This repository finalizes the Aurora Tech project by implementing an end-to-end Machine Learning pipeline and serving infrastructure. It leverages the data acquired in Bloc 2 & 3 to predict margin risk using a Random Forest Classifier and visualizes this risk via an interactive dashboard.
 
 ## Directory Structure
-- `.github/workflows/`: CI/CD pipelines (GitHub Actions) for automatic testing.
+- `../.github/workflows/`: CI/CD pipelines (GitHub Actions) for automatic testing.
 - `notebooks/`: Jupyter notebooks for data exploration and feature engineering.
 - `src/`: Contains the predictive model training scripts and preprocessing.
 - `tests/`: CI/CD quality gate and unit tests.
@@ -22,7 +22,7 @@ This repository finalizes the Aurora Tech project by implementing an end-to-end 
 graph TD
     A[(Data Warehouse)] -->|Fetch Vector| B[Trainer /retrain]
     B -->|Train Random Forest| C(Model Artifact: .pkl)
-    C --> D[FastAPI: /api]
+   C --> D[FastAPI: /predict-margin-risk]
     D -->|Containerize| E[Docker Image]
     E -->|REST API JSON | F[React Web Dashboard]
     G[GitHub Actions] -.->|Automated PyTest Suite| E
@@ -41,6 +41,7 @@ graph TD
    docker build -t auroratech-ml-api .
    docker run -p 8000:8000 auroratech-ml-api
    ```
+   If you want API key protection, set `API_KEY` before starting the server and send the same value in the `X-API-Key` header.
 4. **Kubernetes Deploy**: Apply manifests via `kubectl apply -f k8s/deployment.yaml`.
 5. **Continuous Monitoring & Retraining**: 
    - Evidently/Aporia tracks drift via configs in `/monitoring`.
@@ -55,7 +56,7 @@ graph TD
 
 ## Potential Risks & Mitigation Strategies
 - **Risk: Model Concept & Data Drift**: Mitigated by proposing an automated drift detection system. If the EUR/USD volatility shifts outside training bounds, a retraining pipeline is triggered automatically.
-- **Risk: Unauthorized API Access**: Mitigated by requiring API key authentication on the FastAPI endpoint to prevent competitors from reverse-engineering the predictive thresholds.
+- **Risk: Unauthorized API Access**: Mitigated by optional API key authentication on the FastAPI endpoint when `API_KEY` is configured.
 - **Risk: Broken Model Artifacts in Production**: Mitigated by the CI/CD pipeline (`mlops-ci.yml`), which tests the FastAPI endpoint with structured payloads before allowing deploying to the main branch.
 
 ## Instructions for the Jury

@@ -28,15 +28,19 @@ graph TD
 - **Cold Start Baseline (Historical Data Bootstrapping):**
   - **Financial Baseline:** Initial currency rates initialized via [Frankfurter API](https://www.frankfurter.app/).
   - **Logistics & Product Baseline:** Random Forest model baseline optimized using the [Kaggle Laptop Price Dataset](https://www.kaggle.com/datasets/muhammetvarl/laptop-price) and the [Kaggle Electronic Sales Dataset](https://www.kaggle.com/datasets/cameronseamons/electronic-sales-sep2023-sep2024) (with full GDPR compliance mapping).
-- **Live Operational Pipelines (Daily Ingestion):**
-  - Apache Airflow dynamically triggers daily tasks, pulling real-time exchange rates from the Frankfurter API and simulated logistics telemetry to continuously monitor current margin risk in the data warehouse.
+- **Live Operational Pipelines (Daily Ingestion & Fallbacks):**
+  - Apache Airflow dynamically triggers daily tasks, pulling real-time exchange rates from the Frankfurter API and simulated logistics telemetry to continuously monitor current margin risk.
+- **Mock Testing & Disaster Recovery:**
+  - Standard unit tests in `tests/` load anomalous historical samples from `tests/mock_data/mock_fx_rates_with_spikes.csv` to validate our **5% currency anomaly detector (circuit breaker)** under market stress.
+  - In production, when the API undergoes failure or timeout, the pipeline falls back gracefully to a 7-day moving average or historical backup datasets.
 
 ## How to Run & Deploy
 1. **Airflow Deployment**: Place `dags/auroratech_pipeline.py` into your Airflow `$AIRFLOW_HOME/dags` folder.
 2. **Dependencies**: Ensure the python modules are in your PYTHONPATH:
    ```bash
+  cd bloc3_pipelines
    pip install -r requirements.txt
-   export PYTHONPATH=$PYTHONPATH:/python
+  export PYTHONPATH=$PYTHONPATH:$(pwd)
    ```
 3. **Database Initialization**: Apply the SQL scripts in `/sql` to your Postgres DB.
 4. **Trigger DAG**: Launch the execution via the Airflow UI on port 8080 manually or wait for the daily schedule.

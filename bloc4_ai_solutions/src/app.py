@@ -1,13 +1,14 @@
 import os
 import joblib
 import pandas as pd
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, Header, HTTPException
 from pydantic import BaseModel, Field
 
 # Load the trained ML model & Label Encoder
 MODEL_DIR = "models"
 MODEL_PATH = os.path.join(MODEL_DIR, "auroratech_chromebook_model.pkl")
 ENCODER_PATH = os.path.join(MODEL_DIR, "label_encoder.pkl")
+API_KEY = os.getenv("API_KEY")
 
 try:
     model = joblib.load(MODEL_PATH)
@@ -35,16 +36,25 @@ class PredictionResponse(BaseModel):
     risk_probability: float
     status: str
 
+
+def verify_api_key(x_api_key: str | None = Header(default=None)) -> None:
+    if API_KEY is None:
+        return
+
+    if x_api_key != API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid or missing API key")
+
 @app.get("/health")
 def health_check():
     return {
         "status": "ok", 
         "model_loaded": model is not None,
-        "encoder_loaded": label_encoder is not None
+        "encoder_loaded": label_encoder is not None,
+        "api_key_required": API_KEY is not None
     }
 
 @app.post("/predict-margin-risk", response_model=PredictionResponse)
-def predict(request: PredictionRequest):
+def predict(request: PredictionRequest, _: None = Depends(verify_api_key)):
     if model is None or label_encoder is None:
         raise HTTPException(status_code=503, detail="Model artifact or Label Encoder is not loaded. Train the model first.")
     
