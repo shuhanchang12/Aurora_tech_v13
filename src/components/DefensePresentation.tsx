@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Presentation, Video, MonitorPlay, MessageCircle, FileText, ChevronRight, Globe, TrendingDown, Layers, ShieldCheck, Database, GitMerge, BrainCircuit, Rocket, Coins, CheckSquare } from 'lucide-react';
 import PresentationViewer from './PresentationViewer';
 
-const DefensePresentation = () => {
-    const [activeTab, setActiveTab] = useState<'slides' | 'loom'>('slides');
-
+            title: "Manager Dashboard (React)",
+            content: "Visual walkthrough of the React/Vite interface showing live FX rates, average delays, shipping lists, and an AI Risk Predictor form.",
+            script: "Instead of hiding our AI in the background, we built an easy-to-use manager dashboard using React and Vite. This dashboard acts as the main control center for Aurora Tech's supply chain.\nIt shows live exchange rates and shipping delays, and has a tool where managers can type in custom numbers to immediately see how profits might change. It also shows if our data quality is healthy, keeping track of accuracy, completeness, and AI performance.",
     const renderVis = (Icon: any, label: string) => (
         <div className="flex flex-col items-center justify-center animate-in fade-in zoom-in duration-500">
             <Icon size={72} strokeWidth={1.5} className="mb-4 text-indigo-400" />
@@ -12,8 +12,8 @@ const DefensePresentation = () => {
         </div>
     );
 
-    const slides = [
-        {
+            title: "Step 4 & Dashboard - AI API & React",
+            objective: "Show the machine learning model training, FastAPI documentation, and how the React dashboard works.",
             num: 1,
             title: "Title & Introduction (The Background)",
             content: "Clean, executive tech design with Aurora Tech corporate branding. Title: Project: Atomic-Link — Protecting Global Hardware Margins with AI. Presenter: Shuhan CHANG (Group Controller - Apprentice / AI Architect Candidate).",
@@ -306,5 +306,3 @@ const DefensePresentation = () => {
         </div>
     );
 }
-
-export default DefensePresentation;

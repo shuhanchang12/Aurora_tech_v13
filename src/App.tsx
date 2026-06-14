@@ -6,7 +6,6 @@ import Bloc2Architecture from './components/Bloc2Architecture';
 import Bloc3Pipelines from './components/Bloc3Pipelines';
 import Bloc4AISolutions from './components/Bloc4AISolutions';
 import InteractiveArchitectureDiagram from './components/InteractiveArchitectureDiagram';
-import DefensePresentation from './components/DefensePresentation';
 import { motion, AnimatePresence } from 'motion/react';
 
 const App = () => {
@@ -20,7 +19,6 @@ const App = () => {
             case 3: return <Bloc3Pipelines />;
             case 4: return <Bloc4AISolutions />;
             case 5: return <InteractiveArchitectureDiagram />;
-            case 6: return <DefensePresentation />;
             default: return <DashboardOverview setActiveBloc={setActiveBloc} />;
         }
     };

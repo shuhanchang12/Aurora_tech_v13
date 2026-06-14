@@ -21,8 +21,8 @@ export default function Bloc3Interactive() {
             
             if (scenario === 'red_sea') {
                 setLogs(prev => [...prev, "[WARN] ALERT: Submarine cable/transit disruption at Red Sea."]);
-            } else if (scenario === 'typhoon') {
-                setLogs(prev => [...prev, "[WARN] ALERT: Category 5 Typhoon approaching Taiwan Strait."]);
+            } else if (scenario === 'earthquake') {
+                setLogs(prev => [...prev, "[WARN] ALERT: Magnitude 6.5 Earthquake detected in Taiwan region."]);
             } else {
                 setLogs(prev => [...prev, "[INFO] Transit routes clear. No weather disruptions."]);
             }
@@ -32,8 +32,8 @@ export default function Bloc3Interactive() {
             setStage(3);
             if (scenario === 'red_sea') {
                 setLogs(prev => [...prev, "[ACTION] Vendor VND-NV-01 delayed 14 days.", "[ACTION] Applying Ocean-to-Air emergency rerouting to EMEA."]);
-            } else if (scenario === 'typhoon') {
-                setLogs(prev => [...prev, "[ACTION] Port of Kaohsiung closed. 7-day delay.", "[ACTION] Re-balancing inventory from US reserves."]);
+            } else if (scenario === 'earthquake') {
+                setLogs(prev => [...prev, "[ACTION] Hsinchu Science Park facilities halted for safety checks. 7-day delay.", "[ACTION] Re-balancing inventory from US reserves."]);
             } else {
                 setLogs(prev => [...prev, "[OK] Standard ocean freight schedule maintained.", "[INFO] Cost optimizations applied."]);
             }
@@ -70,7 +70,7 @@ export default function Bloc3Interactive() {
                         >
                             <option value="normal">Normal Operation (Baseline)</option>
                             <option value="red_sea">Simulate: Red Sea Disruption</option>
-                            <option value="typhoon">Simulate: TW Typhoon</option>
+                            <option value="earthquake">Simulate: TW Earthquake</option>
                         </select>
                     </div>
 
