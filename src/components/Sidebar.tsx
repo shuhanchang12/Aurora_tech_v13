@@ -66,17 +66,6 @@ const Sidebar = ({ activeBloc, setActiveBloc }: { activeBloc: number, setActiveB
         })}
       </nav>
 
-      <div className="p-4 border-t border-slate-800/80 bg-slate-900/50 relative z-10">
-        <div className="flex items-center space-x-3 p-2 rounded-xl hover:bg-slate-800/50 transition-colors cursor-default border border-transparent hover:border-slate-700/50">
-          <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 font-bold text-xs ring-1 ring-slate-700">
-            <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">CE</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-bold text-slate-200 font-display">Candidate</span>
-            <span className="text-[10px] text-slate-500 font-mono tracking-wider">ALBERT SCHOOL • JHEDA</span>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
