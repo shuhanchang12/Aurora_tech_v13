@@ -34,6 +34,10 @@ graph TD
   - Standard unit tests in `tests/` load anomalous historical samples from `tests/mock_data/mock_fx_rates_with_spikes.csv` to validate our **5% currency anomaly detector (circuit breaker)** under market stress.
   - In production, when the API undergoes failure or timeout, the pipeline falls back gracefully to a 7-day moving average or historical backup datasets.
 
+### Pipeline Execution Validation
+![Airflow Success](airflow.png)
+*Automated daily execution of the AuroraTech supply chain data pipeline, achieving a 100% success rate across currency extraction, logistics ingestion, and data warehouse loading.*
+
 ## How to Run & Deploy
 1. **Airflow Deployment**: Place `dags/auroratech_pipeline.py` into your Airflow `$AIRFLOW_HOME/dags` folder.
 2. **Dependencies**: Ensure the python modules are in your PYTHONPATH:
