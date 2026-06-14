@@ -9,35 +9,53 @@ from sklearn.preprocessing import LabelEncoder
 
 def fetch_and_adapt_dataco():
     """
-    Simulates fetching the Kaggle DataCo Smart Supply Chain dataset and 
-    performing Domain Adaptation / Data Masking to bootstrap the Chromebook pipeline.
+    Loads raw Kaggle datasets (laptop_price.csv and supply_chain_data.csv) 
+    and applies Chromebook-specific supply chain feature engineering.
     """
-    print("Fetching historical DataCo global supply chain dataset...")
-    np.random.seed(42)
-    n_samples = 3000
+    print("Loading raw Kaggle datasets...")
+    laptop_path = os.path.join("..", "bloc3_pipelines", "dataset", "laptop_price.csv")
+    supply_path = os.path.join("..", "bloc3_pipelines", "dataset", "supply_chain_data.csv")
     
-    # 1. Simulate raw DataCo fields (the "cold-start" raw data)
-    df = pd.DataFrame({
-        'Date': pd.date_range(start='2025-01-01', periods=n_samples, freq='D'),
-        'Days for shipping (real)': np.random.randint(1, 15, n_samples),
-        'Days for shipment (scheduled)': np.random.randint(2, 10, n_samples),
-        'Shipping Mode': np.random.choice(['Standard Class', 'First Class', 'Second Class'], n_samples),
-        'Product Name': np.random.choice(['Smart watch', 'Nike shoes', 'Sports gear'], n_samples),
-        'Customer Name': ['Customer_' + str(i) for i in range(n_samples)],
-        'Order Item Total': np.random.uniform(100, 2000, n_samples),
-        'Benefit per order': np.random.uniform(-50, 400, n_samples)
-    })
+    # Check fallback path just in case we are run from root vs src
+    if not os.path.exists(laptop_path):
+        laptop_path = os.path.join("bloc3_pipelines", "dataset", "laptop_price.csv")
+        supply_path = os.path.join("bloc3_pipelines", "dataset", "supply_chain_data.csv")
+        
+    laptops = pd.read_csv(laptop_path, encoding='latin-1')
+    supply = pd.read_csv(supply_path)
+    
+    # Connect them: assign a random Chromebook / laptop to each supply chain transaction
+    np.random.seed(42)
+    random_laptops = laptops.sample(n=len(supply), replace=True, random_state=42).reset_index(drop=True)
+    df = pd.concat([supply, random_laptops], axis=1)
     
     print("Applying Data Masking & Feature Engineering for Chromebook Context...")
     
-    # 2. Drop irrelevant fields from original Kaggle dataset
-    df = df.drop(columns=['Product Name', 'Customer Name'])
+    # 1. Map raw fields to MLOps model expected fields
+    df['Days for shipping (real)'] = df['Shipping times']
     
-    # 3. Inject Virtual Settings for Chromebook Pipeline
+    # scheduled transit days mapped by transportation mode
+    mode_scheduled_days = {'Air': 2, 'Road': 4, 'Rail': 4, 'Sea': 7}
+    df['Days for shipment (scheduled)'] = df['Transportation modes'].map(mode_scheduled_days)
+    
+    # map transportation modes to Shipping Mode classes
+    mode_shipping_class = {'Air': 'First Class', 'Road': 'Second Class', 'Rail': 'Second Class', 'Sea': 'Standard Class'}
+    df['Shipping Mode'] = df['Transportation modes'].map(mode_shipping_class)
+    
+    # calculate total order value by multiplying laptop price by quantities
+    df['Order Item Total'] = df['Price_euros'] * df['Order quantities']
+    
+    # calculate benefit per order
+    df['Benefit per order'] = df['Revenue generated'] - (df['Manufacturing costs'] * df['Order quantities']) - df['Shipping costs']
+    
+    # Add date field
+    df['Date'] = pd.date_range(start='2026-06-01', periods=len(df), freq='D')
+    
+    # Inject Virtual Settings for Chromebook Pipeline
     df['Product_Category'] = 'Chromebook' # Domain Masking
     
     # Simulate joining with external Forex table
-    df['EUR_USD_Rate'] = np.random.uniform(1.05, 1.15, n_samples)
+    df['EUR_USD_Rate'] = np.random.uniform(1.05, 1.15, len(df))
     
     # Calculate Delay based on DataCo logic
     df['Delay_Days'] = df['Days for shipping (real)'] - df['Days for shipment (scheduled)']
