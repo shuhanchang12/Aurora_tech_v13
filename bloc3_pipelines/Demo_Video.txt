@@ -1,3 +1,5 @@
+Loom Video Link: https://loom.com/share/88d2f50531a74d289874c2e640dfba25
+
 This document outlines the demo process for the Real-time Data Pipelines.
 
 Video Title: AuroraTech ETL Pipeline Operations

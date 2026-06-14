@@ -1,3 +1,5 @@
+Loom Video Link: https://loom.com/share/4d9e03b306b341f5a5e840d216503c58
+
 This document provides the outline for the Bloc 2 Infrastructure Demo Video.
 
 Video Title: AuroraTech Data Architecture - Infrastructure & IaC

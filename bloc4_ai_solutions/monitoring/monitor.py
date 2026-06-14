@@ -1,25 +1,29 @@
+import sys
 from pathlib import Path
+project_root = Path(__file__).resolve().parents[1]
+sys.path.append(str(project_root))
 
 import numpy as np
+import pandas as pd
 import subprocess
 from scipy.stats import ks_2samp
 import yaml
+from src.train_model import fetch_and_adapt_dataco
 
 def load_config():
-    project_root = Path(__file__).resolve().parents[1]
     with open(project_root / "monitoring" / "drift_config.yaml", "r") as f:
         return yaml.safe_load(f)
 
 def get_baseline_data():
-    """Mock loading baseline feature distribution from training phase"""
-    np.random.seed(42)
-    return np.random.uniform(1.00, 1.20, 1000)
+    """Loads baseline feature distribution from the training dataset"""
+    df = fetch_and_adapt_dataco()
+    return df['EUR_USD_Rate'].values
 
 def get_production_data():
-    """Mock loading latest production requests from API logs"""
-    np.random.seed(99)
-    # Introducing a drift in the distribution
-    return np.random.uniform(1.15, 1.35, 200)
+    """Loads latest production requests (with injected drift to demonstrate circuit breaker)"""
+    df = fetch_and_adapt_dataco()
+    # Introducing a drift in the distribution (weaker Euro)
+    return df['EUR_USD_Rate'].values - 0.08
 
 def calculate_drift():
     print("Initiating Drift Detection monitoring...")

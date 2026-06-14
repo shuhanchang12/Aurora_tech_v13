@@ -1,3 +1,5 @@
+Loom Video Link: https://loom.com/share/df80b06b341f5a5e840db3612fc6e0df
+
 This document outlines the Bloc 4 end-to-end MLOps presentation demo.
 
 Video Title: End-to-End MLOps Defense Presentation

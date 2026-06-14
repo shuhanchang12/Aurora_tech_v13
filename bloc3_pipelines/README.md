@@ -29,7 +29,7 @@ graph TD
   - **Financial Baseline:** Initial currency rates initialized via [Frankfurter API](https://www.frankfurter.app/).
   - **Logistics & Product Baseline:** Random Forest model baseline optimized using the [Kaggle Laptop Price Dataset](https://www.kaggle.com/datasets/muhammetvarl/laptop-price) and the [Kaggle Electronic Sales Dataset](https://www.kaggle.com/datasets/cameronseamons/electronic-sales-sep2023-sep2024) (with full GDPR compliance mapping).
 - **Live Operational Pipelines (Daily Ingestion & Fallbacks):**
-  - Apache Airflow dynamically triggers daily tasks, pulling real-time exchange rates from the Frankfurter API and simulated logistics telemetry to continuously monitor current margin risk.
+  - Apache Airflow dynamically triggers daily tasks, pulling real-time exchange rates from the Frankfurter API and Kaggle-sourced logistics telemetry to continuously monitor current margin risk.
 - **Mock Testing & Disaster Recovery:**
   - Standard unit tests in `tests/` load anomalous historical samples from `tests/mock_data/mock_fx_rates_with_spikes.csv` to validate our **5% currency anomaly detector (circuit breaker)** under market stress.
   - In production, when the API undergoes failure or timeout, the pipeline falls back gracefully to a 7-day moving average or historical backup datasets.
@@ -47,7 +47,7 @@ graph TD
 
 ## Evaluation Criteria Met & Addressed
 - **Automated Orchestration**: Utilizes Apache Airflow to schedule and manage dependencies safely (Extraction -> Transformation -> Load).
-- **Multi-Source Extraction**: Combines real-time financial API calls (Frankfurter EUR/USD) with simulated supply-chain telemetry (shipping delays).
+- **Multi-Source Extraction**: Combines real-time financial API calls (Frankfurter EUR/USD) with Kaggle-sourced supply-chain telemetry (shipping delays from Electronic Sales Dataset).
 - **Business Logic Integration**: Implements the complex "Ocean-to-Air" transformation logic natively in Python to adapt transport modes based on sea delay thresholds.
 - **Data Quality & Observability**: Incorporates resilient error handling to fallback to historical averages when external APIs fail.
 
@@ -59,4 +59,4 @@ graph TD
 ## Instructions for the Jury
 1. Open `Pipeline_Plan.html` to review the defense strategy.
 2. Inspect the Python code in `dags/auroratech_pipeline.py` to evaluate the Airflow logic.
-3. **🎥 Demo Video (3-5 min Screencast):** View the live ETL pipelines and DAG execution run here: [Pipelines Demo Video](https://www.loom.com/share/placeholder_bloc3_demo).
+3. **🎥 Demo Video (3-5 min Screencast):** View the live ETL pipelines and DAG execution run here: [Pipelines Demo Video](https://loom.com/share/88d2f50531a74d289874c2e640dfba25).

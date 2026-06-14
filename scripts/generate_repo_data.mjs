@@ -26,6 +26,7 @@ function processBloc(blocName) {
   if (fs.existsSync(dir)) {
     const files = readDirRecursive(dir);
     files.forEach(file => {
+      if (file.endsWith('.pdf')) return;
       const relativePath = path.relative(dir, file);
       let content = '';
       if (!file.endsWith('.pptx') && !file.endsWith('.pkl')) {

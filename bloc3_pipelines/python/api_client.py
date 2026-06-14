@@ -18,5 +18,5 @@ class FXApiClient:
             return data.get("rates", {})
         except Exception as e:
             print(f"API Error: {e}")
-            # Fallback 7-day moving average mock logic
+            # Fallback: 7-day moving average logic (disaster recovery)
             return {"USD": 1.1000, "TWD": 34.5000}

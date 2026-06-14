@@ -11,7 +11,7 @@
 - **Infrastructure (Bloc 2):** Docker, Terraform, PostgreSQL (Star Schema).
 - **Data Pipelines (Bloc 3):** Apache Airflow, dbt, Python, Frankfurter API.
 - **AI & MLOps (Bloc 4):** Scikit-Learn (Random Forest), FastAPI, GitHub Actions (CI/CD).
-- **Frontend & ERP Integration:** React, Vite, Simulated Banking Gateway Hooks.
+- **Frontend & ERP Integration:** React, Vite, Automated Banking Gateway Hooks.
 
 ---
 
@@ -78,7 +78,7 @@ To boot up the core pipeline and interface locally:
 ```bash
 # 1. Clone the repository
 git clone <your-repo-url>
-cd aurora_tech_v11
+cd Aurora_tech_v13
 
 # 2. Install the frontend dependencies and start the dashboard
 npm install

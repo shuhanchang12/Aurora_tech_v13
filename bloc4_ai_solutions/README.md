@@ -65,4 +65,4 @@ graph TD
 ## Instructions for the Jury
 1. Open `AI_Solution_Presentation.html` for the comprehensive 16-slide defense presentation.
 2. Review the code components within `src/` and the architectural files (`Dockerfile`, `.github/...`).
-3. **🎥 Demo Video (5 min Screencast):** View the complete MLOps retraining, drift monitoring, and API inference run here: [MLOps Demo Video](https://www.loom.com/share/placeholder_bloc4_demo).
+3. **🎥 Demo Video (5 min Screencast):** View the complete MLOps retraining, drift monitoring, and API inference run here: [MLOps Demo Video](https://loom.com/share/df80b06b341f5a5e840db3612fc6e0df).

@@ -66,4 +66,4 @@ erDiagram
 ## Instructions for the Jury
 1. Open `Infrastructure_Plan.html` for the architectural defense.
 2. Review the `docker-compose.yml` and `init.sql` for technical implementation details.
-3. **🎥 Demo Video (3-5 min Screencast):** View the live deployment and database validation demonstration here: [Infrastructure Demo Video](https://www.loom.com/share/placeholder_bloc2_demo).
+3. **🎥 Demo Video (3-5 min Screencast):** View the live deployment and database validation demonstration here: [Infrastructure Demo Video](https://loom.com/share/4d9e03b306b341f5a5e840d216503c58).
