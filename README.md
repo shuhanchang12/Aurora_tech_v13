@@ -67,6 +67,10 @@ The predictive engine and operationalized AI services.
 
 ---
 
+## 📊 Data Sources & Lineage
+- **Financial SSOT:** Real-time exchange rates automated via [Frankfurter API](https://www.frankfurter.app/).
+- **Model Training Baseline:** Initial Random Forest features optimized using [Kaggle Laptop Price Dataset](https://www.kaggle.com/datasets/muhammetvarl/laptop-price) and [DataCo Smart Supply Chain Dataset](https://www.kaggle.com/datasets/shashwatwork/dataco-smart-supply-chain-for-big-data-analysis).
+
 ## ⚙️ Quick Start & Installation
 
 To boot up the core pipeline and interface locally:
