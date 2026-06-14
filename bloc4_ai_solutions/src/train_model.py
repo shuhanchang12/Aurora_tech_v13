@@ -9,47 +9,76 @@ from sklearn.preprocessing import LabelEncoder
 
 def fetch_and_adapt_dataco():
     """
-    Loads raw Kaggle datasets (laptop_price.csv and supply_chain_data.csv) 
+    Loads raw Kaggle datasets (laptop_price.csv and Electronic_sales_Sep2023-Sep2024.csv) 
     and applies Chromebook-specific supply chain feature engineering.
     """
     print("Loading raw Kaggle datasets...")
     laptop_path = os.path.join("..", "bloc3_pipelines", "dataset", "laptop_price.csv")
-    supply_path = os.path.join("..", "bloc3_pipelines", "dataset", "supply_chain_data.csv")
+    sales_path = os.path.join("..", "bloc3_pipelines", "dataset", "Electronic_sales_Sep2023-Sep2024.csv")
     
     # Check fallback path just in case we are run from root vs src
     if not os.path.exists(laptop_path):
         laptop_path = os.path.join("bloc3_pipelines", "dataset", "laptop_price.csv")
-        supply_path = os.path.join("bloc3_pipelines", "dataset", "supply_chain_data.csv")
+        sales_path = os.path.join("bloc3_pipelines", "dataset", "Electronic_sales_Sep2023-Sep2024.csv")
         
     laptops = pd.read_csv(laptop_path, encoding='latin-1')
-    supply = pd.read_csv(supply_path)
+    sales = pd.read_csv(sales_path)
     
-    # Connect them: assign a random Chromebook / laptop to each supply chain transaction
+    # Connect them: assign a random Chromebook / laptop to each sales transaction
     np.random.seed(42)
-    random_laptops = laptops.sample(n=len(supply), replace=True, random_state=42).reset_index(drop=True)
-    df = pd.concat([supply, random_laptops], axis=1)
+    random_laptops = laptops.sample(n=len(sales), replace=True, random_state=42).reset_index(drop=True)
+    df = pd.concat([sales, random_laptops], axis=1)
     
     print("Applying Data Masking & Feature Engineering for Chromebook Context...")
     
     # 1. Map raw fields to MLOps model expected fields
-    df['Days for shipping (real)'] = df['Shipping times']
+    # Generate Days for shipping (real) based on Shipping Type
+    # Same Day / Overnight -> 1-2 days, Express / Expedited -> 2-4 days, Standard -> 5-10 days
+    real_shipping_days = []
+    for shipping_type in df['Shipping Type']:
+        if shipping_type in ['Same Day', 'Overnight']:
+            real_shipping_days.append(np.random.randint(1, 3))
+        elif shipping_type in ['Express', 'Expedited']:
+            real_shipping_days.append(np.random.randint(2, 5))
+        else: # Standard
+            real_shipping_days.append(np.random.randint(5, 11))
+    df['Days for shipping (real)'] = real_shipping_days
     
-    # scheduled transit days mapped by transportation mode
-    mode_scheduled_days = {'Air': 2, 'Road': 4, 'Rail': 4, 'Sea': 7}
-    df['Days for shipment (scheduled)'] = df['Transportation modes'].map(mode_scheduled_days)
+    # scheduled transit days mapped by Shipping Type
+    type_scheduled_days = {'Same Day': 1, 'Overnight': 1, 'Express': 3, 'Expedited': 3, 'Standard': 6}
+    df['Days for shipment (scheduled)'] = df['Shipping Type'].map(type_scheduled_days).fillna(6).astype(int)
     
-    # map transportation modes to Shipping Mode classes
-    mode_shipping_class = {'Air': 'First Class', 'Road': 'Second Class', 'Rail': 'Second Class', 'Sea': 'Standard Class'}
-    df['Shipping Mode'] = df['Transportation modes'].map(mode_shipping_class)
+    # map shipping types to Shipping Mode classes
+    type_shipping_class = {
+        'Same Day': 'First Class', 
+        'Overnight': 'First Class', 
+        'Express': 'Second Class', 
+        'Expedited': 'Second Class', 
+        'Standard': 'Standard Class'
+    }
+    df['Shipping Mode'] = df['Shipping Type'].map(type_shipping_class).fillna('Standard Class')
     
     # calculate total order value by multiplying laptop price by quantities
-    df['Order Item Total'] = df['Price_euros'] * df['Order quantities']
+    df['Order Item Total'] = df['Price_euros'] * df['Quantity']
     
-    # calculate benefit per order
-    df['Benefit per order'] = df['Revenue generated'] - (df['Manufacturing costs'] * df['Order quantities']) - df['Shipping costs']
+    # Calculate Delay based on logic
+    df['Delay_Days'] = df['Days for shipping (real)'] - df['Days for shipment (scheduled)']
+    df['Delay_Days'] = df['Delay_Days'].apply(lambda x: x if x > 0 else 0)
+    
+    # Calculate Benefit per order:
+    # Revenue = Order Item Total
+    # Base Cost = 75% of Revenue
+    # Extra Freight = Same Day: 50, Overnight: 40, Express: 15, Expedited: 15, Standard: 5 per unit
+    # Delay Penalty = if Delay > 2 days, penalty of 50 per unit
+    base_cost = df['Order Item Total'] * 0.75
+    extra_freight = df['Shipping Type'].map({'Same Day': 50.0, 'Overnight': 40.0, 'Express': 15.0, 'Expedited': 15.0, 'Standard': 5.0}).fillna(5.0) * df['Quantity']
+    delay_penalty = df['Delay_Days'].apply(lambda x: 50.0 if x > 2 else 0.0) * df['Quantity']
+    total_cost = base_cost + extra_freight + delay_penalty
+    
+    df['Benefit per order'] = df['Order Item Total'] - total_cost
     
     # Add date field
-    df['Date'] = pd.date_range(start='2026-06-01', periods=len(df), freq='D')
+    df['Date'] = pd.to_datetime(df['Purchase Date'])
     
     # Inject Virtual Settings for Chromebook Pipeline
     df['Product_Category'] = 'Chromebook' # Domain Masking
@@ -57,12 +86,8 @@ def fetch_and_adapt_dataco():
     # Simulate joining with external Forex table
     df['EUR_USD_Rate'] = np.random.uniform(1.05, 1.15, len(df))
     
-    # Calculate Delay based on DataCo logic
-    df['Delay_Days'] = df['Days for shipping (real)'] - df['Days for shipment (scheduled)']
-    df['Delay_Days'] = df['Delay_Days'].apply(lambda x: x if x > 0 else 0)
-    
-    # Define Target: Margin Risk (1 if Benefit is negative or delay exceeds threshold causing penalties)
-    df['Margin_Risk'] = ((df['Benefit per order'] < 0) | (df['Delay_Days'] > 3)).astype(int)
+    # Define Target: Margin Risk (1 if Benefit per order is low, i.e. < 5% of Revenue, or delay is high)
+    df['Margin_Risk'] = ((df['Benefit per order'] < df['Order Item Total'] * 0.05) | (df['Delay_Days'] > 3)).astype(int)
     
     return df
 

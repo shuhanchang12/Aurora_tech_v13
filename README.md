@@ -69,7 +69,7 @@ The predictive engine and operationalized AI services.
 
 ## 📊 Data Sources & Lineage
 - **Financial SSOT:** Real-time exchange rates automated via [Frankfurter API](https://www.frankfurter.app/).
-- **Model Training Baseline:** Initial Random Forest features optimized using [Kaggle Laptop Price Dataset](https://www.kaggle.com/datasets/muhammetvarl/laptop-price) and [DataCo Smart Supply Chain Dataset](https://www.kaggle.com/datasets/shashwatwork/dataco-smart-supply-chain-for-big-data-analysis).
+- **Model Training Baseline:** Initial Random Forest features optimized using [Kaggle Laptop Price Dataset](https://www.kaggle.com/datasets/muhammetvarl/laptop-price) and [Kaggle Electronic Sales Dataset](https://www.kaggle.com/datasets/heeraldedhia/electronic-sales-sep2023-sep2024) (adapting hardware specs and sales logs for Chromebook supply chain simulation).
 
 ## ⚙️ Quick Start & Installation
 
@@ -77,8 +77,8 @@ To boot up the core pipeline and interface locally:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/shuhanchang12/Aurora_tech_v4.git
-cd Aurora_tech_v4
+git clone https://github.com/shuhanchang12/Aurora_tech_v13.git
+cd Aurora_tech_v13
 
 # 2. Boot up the infrastructure (PostgreSQL, FastAPI, Dashboard)
 cd bloc2_architecture
