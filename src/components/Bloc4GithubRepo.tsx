@@ -69,44 +69,64 @@ if __name__ == "__main__":
         },
         'app.py': {
             lang: 'python',
-            code: `from fastapi import FastAPI
+            code: `import os
 import joblib
-import pydantic
+import pandas as pd
+from fastapi import Depends, FastAPI, Header, HTTPException
+from pydantic import BaseModel, Field
 
-app = FastAPI(title="Aurora Tech AI Risk Prediction Engine", version="2026.06")
+MODEL_DIR = "models"
+MODEL_PATH = os.path.join(MODEL_DIR, "auroratech_chromebook_model.pkl")
+ENCODER_PATH = os.path.join(MODEL_DIR, "label_encoder.pkl")
+API_KEY = os.getenv("API_KEY")
 
-class ProcurementInput(pydantic.BaseModel):
-    eur_to_usd: float
-    eur_to_twd: float
-    component_delay_days: int
-    freight_cost_eur: float
+try:
+    model = joblib.load(MODEL_PATH)
+    label_encoder = joblib.load(ENCODER_PATH)
+except FileNotFoundError:
+    model = None
+    label_encoder = None
 
-@app.on_event("startup")
-def load_model_artifact():
-    global model
-    model = joblib.load('auroratech_chromebook_model.pkl')
+app = FastAPI(title="AuroraTech Margin Prediction API (DataCo Adapted)", version="1.1.0")
+
+class PredictionRequest(BaseModel):
+    days_for_shipping_real: int = Field(...)
+    days_for_shipment_scheduled: int = Field(...)
+    shipping_mode: str = Field(...)
+    order_item_total: float = Field(...)
+    eur_usd_rate: float = Field(...)
+
+def verify_api_key(x_api_key: str | None = Header(default=None)) -> None:
+    if API_KEY is None:
+        return
+    if x_api_key != API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid or missing API key")
+
+@app.get("/health")
+def health_check():
+    return {
+        "status": "ok",
+        "model_loaded": model is not None,
+        "encoder_loaded": label_encoder is not None,
+        "api_key_required": API_KEY is not None,
+    }
 
 @app.post("/predict-margin-risk")
-def predict_risk(data: ProcurementInput):
-    # Format input vectors
-    features = [[data.eur_to_usd, data.eur_to_twd, data.component_delay_days, data.freight_cost_eur]]
+def predict_risk(data: PredictionRequest, _: None = Depends(verify_api_key)):
+    features = pd.DataFrame([{
+        "Days for shipping (real)": data.days_for_shipping_real,
+        "Days for shipment (scheduled)": data.days_for_shipment_scheduled,
+        "Shipping_Mode_Encoded": 0,
+        "Order Item Total": data.order_item_total,
+        "EUR_USD_Rate": data.eur_usd_rate,
+    }])
     prediction = model.predict(features)[0]
     probability = model.predict_proba(features)[0][1]
-    
-    # Generate business recommendations & automated hedging trigger conditions
-    if prediction == 1:
-        if data.freight_cost_eur >= 45.00:
-            recommendation = "[WARNING] Switched to Air France Cargo. Cost jumped to 45 EUR. Action: Execute immediate currency hedging and fast-track PO authorization to lock in supplier prices."
-        else:
-            recommendation = "[WARNING] Bad exchange rates detected. Action: Contact the bank immediately to lock in the currency rate."
-    else:
-        recommendation = "[INFO] Costs and delays are normal. Safe to proceed with normal orders."
-        
+
     return {
-        "status": "success",
-        "margin_impact_risk_detected": bool(prediction),
-        "risk_probability": f"{probability * 100:.2f}%",
-        "recommendation": recommendation
+        "status": "Success",
+        "risk_prediction": int(prediction),
+        "risk_probability": float(probability),
     }`
         },
         'mlops-ci.yml': {
@@ -262,7 +282,7 @@ This repository contains the Machine Learning and MLOps components for predictiv
 
 ## Architecture & How to run
 1. **Model Validation**: See \`notebooks/\` for data exploration. Model code is in \`src/\`.
-2. **Deploy Service**: Run \`docker build -t app .\` followed by \`docker run -p 8000:8000 app\`.
+2. **Deploy Service**: Run \`docker build -t app .\` followed by \`docker run -p 8000:8000 app\`. Set \`API_KEY\` if you want \`X-API-Key\` protection.
 3. **Continuous Monitoring**: We use Aporia/Evidently (see \`monitoring/\`) to track data drift on exchange rates.
 4. **Retraining**: When drift exceeds threshold, CI/CD calls \`retrain/run_retrain.py\`.
 

@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Presentation, Video, MonitorPlay, MessageCircle, FileText, ChevronRight, Globe, TrendingDown, Layers, ShieldCheck, Database, GitMerge, BrainCircuit, Rocket, Coins, CheckSquare } from 'lucide-react';
 import PresentationViewer from './PresentationViewer';
 
-export default function DefensePresentation() {
-    const [activeTab, setActiveTab] = useState<'slides' | 'loom'>('slides');
-
+            title: "Manager Dashboard (React)",
+            content: "Visual walkthrough of the React/Vite interface showing live FX rates, average delays, shipping lists, and an AI Risk Predictor form.",
+            script: "Instead of hiding our AI in the background, we built an easy-to-use manager dashboard using React and Vite. This dashboard acts as the main control center for Aurora Tech's supply chain.\nIt shows live exchange rates and shipping delays, and has a tool where managers can type in custom numbers to immediately see how profits might change. It also shows if our data quality is healthy, keeping track of accuracy, completeness, and AI performance.",
     const renderVis = (Icon: any, label: string) => (
         <div className="flex flex-col items-center justify-center animate-in fade-in zoom-in duration-500">
             <Icon size={72} strokeWidth={1.5} className="mb-4 text-indigo-400" />
@@ -12,8 +12,8 @@ export default function DefensePresentation() {
         </div>
     );
 
-    const slides = [
-        {
+            title: "Step 4 & Dashboard - AI API & React",
+            objective: "Show the machine learning model training, FastAPI documentation, and how the React dashboard works.",
             num: 1,
             title: "Title & Introduction (The Background)",
             content: "Clean, executive tech design with Aurora Tech corporate branding. Title: Project: Atomic-Link — Protecting Global Hardware Margins with AI. Presenter: Shuhan CHANG (Group Controller - Apprentice / AI Architect Candidate).",
@@ -80,9 +80,9 @@ export default function DefensePresentation() {
         },
         {
             num: 10,
-            title: "Manager Dashboard (Streamlit)",
-            content: "Visual walkthrough of the Streamlit interface showing live FX rates, average delays, shipping lists, and an AI Risk Predictor form.",
-            script: "Instead of hiding our AI in the background, we built an easy-to-use manager dashboard using Streamlit. This dashboard acts as the main control center for Aurora Tech's supply chain.\nIt shows live exchange rates and shipping delays, and has a tool where managers can type in custom numbers to immediately see how profits might change. It also shows if our data quality is healthy, keeping track of accuracy, completeness, and AI performance.",
+            title: "Manager Dashboard (React)",
+            content: "Visual walkthrough of the React/Vite interface showing live FX rates, average delays, shipping lists, and an AI Risk Predictor form.",
+            script: "Instead of hiding our AI in the background, we built an easy-to-use manager dashboard using React and Vite. This dashboard acts as the main control center for Aurora Tech's supply chain.\nIt shows live exchange rates and shipping delays, and has a tool where managers can type in custom numbers to immediately see how profits might change. It also shows if our data quality is healthy, keeping track of accuracy, completeness, and AI performance.",
             visualComponent: renderVis(MonitorPlay, "Interactive Dashboard")
         },
         {
@@ -153,9 +153,9 @@ export default function DefensePresentation() {
         },
         {
             id: 3,
-            title: "Step 4 & Dashboard - AI API & Streamlit",
+            title: "Step 4 & Dashboard - AI API & React",
             target: "5 Minutes",
-            objective: "Show the machine learning model training, FastAPI documentation, and how the Streamlit dashboard works.",
+            objective: "Show the machine learning model training, FastAPI documentation, and how the React dashboard works.",
             steps: [
                 {
                     action: "Show VS Code with train_model.py and app.py open. Show the terminal running python train_model.py.",
@@ -170,8 +170,8 @@ export default function DefensePresentation() {
                     script: "As I click 'Execute', our API replies instantly. Our AI model sees an 87.5% risk to our profits, and suggests preparing an automated hedging payment to avoid losing more money to bad exchange rates."
                 },
                 {
-                    action: "Switch to the browser tab showing your Streamlit dashboard running.",
-                    script: "Now, let's view this in our main manager dashboard, which is built in Streamlit. At the top, managers can see live exchange rates, active flights, and risk levels. Below, they can trace past trends and view shipping lists."
+                    action: "Switch to the browser tab showing your React dashboard running.",
+                    script: "Now, let's view this in our main manager dashboard, which is built in React. At the top, managers can see live exchange rates, active flights, and risk levels. Below, they can trace past trends and view shipping lists."
                 },
                 {
                     action: "Interact with the radio button (select Air France Cargo) and the slider. Click 'Execute Margin Inference'.",

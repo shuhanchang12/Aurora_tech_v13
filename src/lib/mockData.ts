@@ -171,30 +171,70 @@ End-to-end industrialization of AuroraTech AI prediction model.
   {
     name: 'src/app.py',
     language: 'python',
-    content: `from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-import joblib
-import pandas as pd
+    content: `import os
+  import joblib
+  import pandas as pd
+  from fastapi import Depends, FastAPI, Header, HTTPException
+  from pydantic import BaseModel, Field
 
-app = FastAPI(title="AuroraTech ML Serving API")
+  MODEL_DIR = "models"
+  MODEL_PATH = os.path.join(MODEL_DIR, "auroratech_chromebook_model.pkl")
+  ENCODER_PATH = os.path.join(MODEL_DIR, "label_encoder.pkl")
+  API_KEY = os.getenv("API_KEY")
 
-# Load model
-model = joblib.load("models/xgboost_v1.pkl")
+  try:
+    model = joblib.load(MODEL_PATH)
+    label_encoder = joblib.load(ENCODER_PATH)
+  except FileNotFoundError:
+    model = None
+    label_encoder = None
 
-class PredictionRequest(BaseModel):
-    feature_1: float
-    feature_2: float
-    feature_3: str
+  app = FastAPI(title="AuroraTech Margin Prediction API (DataCo Adapted)", version="1.1.0")
 
-@app.post("/predict")
-def predict(req: PredictionRequest):
-    try:
-        data = pd.DataFrame([req.dict()])
-        prediction = model.predict(data)
-        return {"prediction": float(prediction[0]), "status": "success"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-`
+  class PredictionRequest(BaseModel):
+    days_for_shipping_real: int = Field(...)
+    days_for_shipment_scheduled: int = Field(...)
+    shipping_mode: str = Field(...)
+    order_item_total: float = Field(...)
+    eur_usd_rate: float = Field(...)
+
+  def verify_api_key(x_api_key: str | None = Header(default=None)) -> None:
+    if API_KEY is None:
+      return
+    if x_api_key != API_KEY:
+      raise HTTPException(status_code=401, detail="Invalid or missing API key")
+
+  @app.get("/health")
+  def health_check():
+    return {
+      "status": "ok",
+      "model_loaded": model is not None,
+      "encoder_loaded": label_encoder is not None,
+      "api_key_required": API_KEY is not None,
+    }
+
+  @app.post("/predict-margin-risk")
+  def predict(req: PredictionRequest, _: None = Depends(verify_api_key)):
+    if model is None or label_encoder is None:
+      raise HTTPException(status_code=503, detail="Model artifact or Label Encoder is not loaded. Train the model first.")
+
+    features = pd.DataFrame([{
+      "Days for shipping (real)": req.days_for_shipping_real,
+      "Days for shipment (scheduled)": req.days_for_shipment_scheduled,
+      "Shipping_Mode_Encoded": 0,
+      "Order Item Total": req.order_item_total,
+      "EUR_USD_Rate": req.eur_usd_rate,
+    }])
+
+    prediction = model.predict(features)[0]
+    probability = model.predict_proba(features)[0][1]
+
+    return {
+      "status": "Success",
+      "risk_prediction": int(prediction),
+      "risk_probability": float(probability),
+    }
+  `
   },
   {
     name: '.github/workflows/mlops-ci.yml',

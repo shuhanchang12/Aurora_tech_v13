@@ -31,7 +31,7 @@ export default function OriginalFXDashboard() {
         fetchFX();
     }, []);
 
-    // Derived AI Prediction Logic based on Streamlit code
+    // Derived AI Prediction Logic based on the React dashboard flow
     const isMarginImpacted = simCost >= 45 || simUsd < 1.05;
     const riskProbability = isMarginImpacted ? "87.42%" : "12.58%";
 
