@@ -144,7 +144,7 @@ with DAG(
     'auroratech_realtime_pipeline',
     default_args=default_args,
     description='ETL pipeline for FX Rates and Freight Logs',
-    schedule_interval=timedelta(days=1),
+    schedule=timedelta(days=1),
     start_date=datetime(2026, 1, 1),
     catchup=False,
     tags=['auroratech'],
