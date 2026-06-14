@@ -1,10 +1,13 @@
+from pathlib import Path
+
 import numpy as np
 import subprocess
 from scipy.stats import ks_2samp
 import yaml
 
 def load_config():
-    with open("monitoring/drift_config.yaml", "r") as f:
+    project_root = Path(__file__).resolve().parents[1]
+    with open(project_root / "monitoring" / "drift_config.yaml", "r") as f:
         return yaml.safe_load(f)
 
 def get_baseline_data():
@@ -43,4 +46,4 @@ if __name__ == "__main__":
     if is_drifted:
         print("Triggering automated retraining pipeline...")
         # Automatically call the retraining script
-        subprocess.run(["python", "retrain/run_retrain.py"])
+        subprocess.run(["python", str(Path(__file__).resolve().parents[1] / "retrain" / "run_retrain.py")], cwd=Path(__file__).resolve().parents[1])

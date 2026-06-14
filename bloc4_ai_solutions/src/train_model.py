@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import os
 import pandas as pd
 import numpy as np
@@ -12,17 +14,34 @@ def fetch_and_adapt_dataco():
     Loads raw Kaggle datasets (laptop_price.csv and Electronic_sales_Sep2023-Sep2024.csv) 
     and applies Chromebook-specific supply chain feature engineering.
     """
-    print("Loading raw Kaggle datasets...")
-    laptop_path = os.path.join("..", "bloc3_pipelines", "dataset", "laptop_price.csv")
-    sales_path = os.path.join("..", "bloc3_pipelines", "dataset", "Electronic_sales_Sep2023-Sep2024.csv")
-    
-    # Check fallback path just in case we are run from root vs src
-    if not os.path.exists(laptop_path):
-        laptop_path = os.path.join("bloc3_pipelines", "dataset", "laptop_price.csv")
-        sales_path = os.path.join("bloc3_pipelines", "dataset", "Electronic_sales_Sep2023-Sep2024.csv")
-        
-    laptops = pd.read_csv(laptop_path, encoding='latin-1')
-    sales = pd.read_csv(sales_path)
+    print("Loading local Bloc 4 datasets...")
+    project_root = Path(__file__).resolve().parents[1]
+    local_dataset_dir = project_root / "dataset"
+
+    laptop_path = local_dataset_dir / "laptop_price.csv"
+    sales_path = local_dataset_dir / "electronic_sales.csv"
+
+    if laptop_path.exists() and sales_path.exists():
+        laptops = pd.read_csv(laptop_path, encoding='latin-1')
+        sales = pd.read_csv(sales_path)
+    else:
+        print("Local datasets missing. Generating deterministic fallback samples.")
+        laptops = pd.DataFrame(
+            [
+                {"Price_euros": 499.0, "Company": "Acer", "Product": "Chromebook", "Ram": "8GB"},
+                {"Price_euros": 799.0, "Company": "Lenovo", "Product": "Chromebook", "Ram": "8GB"},
+                {"Price_euros": 1099.0, "Company": "HP", "Product": "Chromebook", "Ram": "16GB"},
+                {"Price_euros": 1299.0, "Company": "Dell", "Product": "Chromebook", "Ram": "16GB"},
+            ]
+        )
+        sales = pd.DataFrame(
+            [
+                {"Shipping Type": "Standard", "Quantity": 2, "Purchase Date": "2026-01-03", "Age": 34, "Gender": "F", "Customer ID": 101},
+                {"Shipping Type": "Express", "Quantity": 1, "Purchase Date": "2026-01-04", "Age": 29, "Gender": "M", "Customer ID": 102},
+                {"Shipping Type": "Expedited", "Quantity": 3, "Purchase Date": "2026-01-05", "Age": 41, "Gender": "F", "Customer ID": 103},
+                {"Shipping Type": "Overnight", "Quantity": 1, "Purchase Date": "2026-01-06", "Age": 38, "Gender": "M", "Customer ID": 104},
+            ]
+        )
     
     # GDPR Compliance & Data Anonymization
     # 1. Drop client PII (Age, Gender) to prevent storing identifying details in the DW

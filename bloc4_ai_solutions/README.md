@@ -1,10 +1,11 @@
 # Aurora Tech - Bloc 4: AI Solutions & Dashboards
 
 ## Overview
-This repository finalizes the Aurora Tech project by implementing an end-to-end Machine Learning pipeline and serving infrastructure. It leverages the data acquired in Bloc 2 & 3 to predict margin risk using a Random Forest Classifier and visualizes this risk via an interactive dashboard.
+This folder is a self-contained Bloc 4 deliverable that implements an end-to-end Machine Learning pipeline and serving infrastructure. It ships with its own sample datasets, trained model assets, API, monitoring, and CI so it can be reviewed independently from Bloc 2 and Bloc 3.
 
 ## Directory Structure
-- `../.github/workflows/`: CI/CD pipelines (GitHub Actions) for automatic testing.
+- `.github/workflows/`: CI/CD pipelines (GitHub Actions) for automatic testing.
+- `dataset/`: Local CSV datasets used for training and tests, plus a generator script.
 - `notebooks/`: Jupyter notebooks for data exploration and feature engineering.
 - `src/`: Contains the predictive model training scripts and preprocessing.
 - `tests/`: CI/CD quality gate and unit tests.
@@ -30,12 +31,14 @@ graph TD
 ```
 
 ## 📊 Data Sources & Lineage
-- **Financial SSOT:** Real-time exchange rates automated via [Frankfurter API](https://www.frankfurter.app/).
-- **Model Training Baseline:** Initial Random Forest features optimized using [Kaggle Laptop Price Dataset](https://www.kaggle.com/datasets/muhammetvarl/laptop-price) and [Kaggle Electronic Sales Dataset](https://www.kaggle.com/datasets/cameronseamons/electronic-sales-sep2023-sep2024).
+- **Local Training Set:** The bundled CSV files in `dataset/` provide deterministic training and test data so this folder can run standalone.
+- **Dataset Size:** The submission includes an 80-row laptop catalog and a 240-row sales dataset to keep training and evaluation representative without depending on Bloc 3.
+- **Optional External Context:** The code still mirrors the original Frankfurter/Kaggle narrative, but the submission no longer depends on Bloc 3 files.
 
 ## How to Run & Deploy
 1. **Model Validation**: Open notebooks in `/notebooks` to view data exploration. Run `pytest` inside `/tests` to validate logic.
-2. **Train Model**: Run `python src/train_model.py` to generate the `.pkl` artifact in `/models`.
+2. **Train Model**: Run `python src/train_model.py` to generate the `.pkl` artifact in `/models` using the bundled `dataset/` CSV files.
+   - If you want to regenerate the local datasets, run `python dataset/generate_datasets.py` first.
 3. **Deploy API Locally**: 
    ```bash
    docker build -t auroratech-ml-api .
@@ -57,7 +60,7 @@ graph TD
 ## Potential Risks & Mitigation Strategies
 - **Risk: Model Concept & Data Drift**: Mitigated by proposing an automated drift detection system. If the EUR/USD volatility shifts outside training bounds, a retraining pipeline is triggered automatically.
 - **Risk: Unauthorized API Access**: Mitigated by optional API key authentication on the FastAPI endpoint when `API_KEY` is configured.
-- **Risk: Broken Model Artifacts in Production**: Mitigated by the CI/CD pipeline (`mlops-ci.yml`), which tests the FastAPI endpoint with structured payloads before allowing deploying to the main branch.
+- **Risk: Broken Model Artifacts in Production**: Mitigated by the Bloc 4 CI workflow in `.github/workflows/ci.yml`, which runs the model tests before merge.
 
 ## Instructions for the Jury
 1. Open `AI_Solution_Presentation.html` for the comprehensive 16-slide defense presentation.

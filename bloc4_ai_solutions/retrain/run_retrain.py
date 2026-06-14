@@ -1,13 +1,14 @@
-import os
+from pathlib import Path
 import subprocess
 from datetime import datetime
 
 def run_retraining():
+    project_root = Path(__file__).resolve().parents[1]
     print(f"[{datetime.now().isoformat()}] Starting Automated Retraining Pipeline...")
     
     # Step 1: Fetch new data and train the model
     print("--- Step 1: Training Module ---")
-    ret_code = subprocess.run(["python", "src/train_model.py"]).returncode
+    ret_code = subprocess.run(["python", str(project_root / "src" / "train_model.py")], cwd=project_root).returncode
     
     if ret_code != 0:
         print("Retraining failed at the training module.")
@@ -17,7 +18,7 @@ def run_retraining():
     
     # Step 2: Validate through PyTest / Unittest
     print("--- Step 2: Validation via Tests ---")
-    test_code = subprocess.run(["python", "-m", "unittest", "tests/test_model.py"]).returncode
+    test_code = subprocess.run(["python", "-m", "unittest", "discover", "-s", "tests", "-p", "test_model.py"], cwd=project_root).returncode
     
     if test_code != 0:
         print("Validation tests failed. The newly trained model will NOT be deployed.")
