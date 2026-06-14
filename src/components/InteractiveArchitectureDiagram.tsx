@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Database, Server, Cloud, Cpu, LineChart, Shield, GitBranch, Terminal, Globe, ArrowRight, CheckCircle2, Navigation } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { cn } from './demos/Bloc1GovernanceDemo';
+import { cn } from '../lib/utils';
 
 export default function InteractiveArchitectureDiagram() {
     const [activeLayer, setActiveLayer] = useState<'all' | 'govern' | 'infra' | 'pipeline' | 'ai'>('all');

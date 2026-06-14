@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BrainCircuit, Cpu, Zap, Activity, AlertTriangle, ShieldCheck, BarChart3, LineChart } from 'lucide-react';
-import { cn } from './Bloc1GovernanceDemo';
+import { cn } from '../../lib/utils';
 
 export default function Bloc4AIDemo() {
     const [view, setView] = useState<'inference' | 'monitoring'>('inference');

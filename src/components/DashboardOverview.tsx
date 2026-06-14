@@ -75,13 +75,13 @@ const DashboardOverview = ({ setActiveBloc }: { setActiveBloc: (id: number) => v
                 variants={containerVariants}
                 initial="hidden"
                 animate="show"
-                className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+                className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
                 {/* Hero / System Architecture Card */}
                 <motion.button 
                     variants={itemVariants}
                     onClick={() => setActiveBloc(5)} 
-                    className="col-span-1 md:col-span-2 lg:col-span-4 group p-8 bg-[#0f172a] border border-slate-800 rounded-2xl shadow-xl hover:shadow-blue-900/20 transition-all text-left flex flex-col md:flex-row items-start md:items-center justify-between relative overflow-hidden"
+                    className="col-span-1 md:col-span-2 lg:col-span-3 group p-8 bg-[#0f172a] border border-slate-800 rounded-2xl shadow-xl hover:shadow-blue-900/20 transition-all text-left flex flex-col md:flex-row items-start md:items-center justify-between relative overflow-hidden"
                 >
                     <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 blur-[80px] rounded-full pointer-events-none"></div>
                     <div className="relative z-10">
@@ -91,7 +91,7 @@ const DashboardOverview = ({ setActiveBloc }: { setActiveBloc: (id: number) => v
                              </div>
                              <h3 className="text-2xl font-bold text-white tracking-wide font-display">Global Architecture Topology</h3>
                         </div>
-                        <p className="text-slate-400 mt-2 max-w-2xl text-lg">Explore the interactive end-to-end data flow spanning Data Governance, Infrastructure, Real-Time Pipelines, and ML platforms.</p>
+                        <p className="text-slate-400 mt-2 max-w-2xl text-lg">Explore the interactive end-to-end data flow spanning Infrastructure, Real-Time Pipelines, and ML platforms.</p>
                     </div>
                     <div className="mt-6 md:mt-0 relative z-10 flex items-center space-x-2 bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-xl transition-colors font-medium">
                         <span>Initialize View</span>
@@ -100,16 +100,6 @@ const DashboardOverview = ({ setActiveBloc }: { setActiveBloc: (id: number) => v
                 </motion.button>
 
                 {/* Modules */}
-                <ModuleCard 
-                    title="Global Data Compliance"
-                    blocNum={1}
-                    icon={<ShieldCheck />}
-                    color="blue"
-                    desc="GDPR, Audits & Security"
-                    badge="Active"
-                    onClick={() => setActiveBloc(1)}
-                    variants={itemVariants}
-                />
                 <ModuleCard 
                     title="IT Infrastructure"
                     blocNum={2}

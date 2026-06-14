@@ -6,7 +6,6 @@ const Sidebar = ({ activeBloc, setActiveBloc }: { activeBloc: number, setActiveB
   const navItems = [
     { id: 0, title: 'Global Operations Dashboard', icon: LayoutDashboard },
     { id: 5, title: 'ERP Architecture Overview', icon: Share2 },
-    { id: 1, title: 'Bloc 1: Global Data Compliance', icon: ShieldCheck },
     { id: 2, title: 'Bloc 2: IT Infrastructure', icon: Database },
     { id: 3, title: 'Bloc 3: Global Procurement', icon: Zap },
     { id: 4, title: 'Bloc 4: AI Risk Engine', icon: BrainCircuit },

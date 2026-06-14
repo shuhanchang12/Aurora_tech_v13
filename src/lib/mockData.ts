@@ -1,36 +1,5 @@
 // Mock data for the diverse file repositories and documents requested
 
-export const BLOC1_DOCUMENT = `AURORATECH - DATA GOVERNANCE POLICY
-Author: Master Student (JHEDA)
-Date: June 2026
-
-1. EXECUTIVE SUMMARY
-This data governance plan outlines the strategic framework for AuroraTech, ensuring data quality, privacy compliance (GDPR), and robust security across the enterprise data ecosystem.
-
-2. STAKEHOLDERS & ROLES
-- Data Sponsor: Chief Data Officer (CDO)
-- Data Stewards: Department leads (Marketing, Finance, HR)
-- Data Custodians: IT and Data Engineering teams
-- Data Users: Data Scientists, Analysts, Business Users
-
-3. GDPR COMPLIANCE STRATEGY
-AuroraTech processes PII (Personally Identifiable Information). To maintain compliance:
-- Data Mapping: Complete registry of all PII processing activities.
-- Consent Management: Granular opt-in tracking for marketing analytics.
-- Right to Erasure: Automated workflows to anonymize user data within 30 days of request.
-
-4. DATA QUALITY METRICS
-- Accuracy: 99.5% threshold for critical financial records.
-- Completeness: Null-value tracking on primary key constraints.
-- Timeliness: Real-time pipelines MUST sync within 5 minutes.
-
-5. SECURITY MEASURES
-- Role-Based Access Control (RBAC) enforced at the database level.
-- At-rest encryption using AES-256 for data lakes.
-- Monthly regulatory compliance audits.
-
-...(Document spans 8-10 pages containing precise audit logs, matrices and risk assessments)...`;
-
 export const BLOC2_REPO = [
   {
     name: 'README.md',
