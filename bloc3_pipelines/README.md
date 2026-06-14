@@ -55,4 +55,4 @@ graph TD
 ## Instructions for the Jury
 1. Open `Pipeline_Plan.html` to review the defense strategy.
 2. Inspect the Python code in `dags/auroratech_pipeline.py` to evaluate the Airflow logic.
-3. Consult `Demo_Video.txt` for the execution demonstration.
+3. **🎥 Demo Video (3-5 min Screencast):** View the live ETL pipelines and DAG execution run here: [Pipelines Demo Video](https://www.loom.com/share/placeholder_bloc3_demo).

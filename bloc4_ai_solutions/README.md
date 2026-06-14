@@ -59,6 +59,6 @@ graph TD
 - **Risk: Broken Model Artifacts in Production**: Mitigated by the CI/CD pipeline (`mlops-ci.yml`), which tests the FastAPI endpoint with structured payloads before allowing deploying to the main branch.
 
 ## Instructions for the Jury
-1. Open `AI_Solution_Presentation.html` for the comprehensive 15-slide defense presentation.
+1. Open `AI_Solution_Presentation.html` for the comprehensive 16-slide defense presentation.
 2. Review the code components within `src/` and the architectural files (`Dockerfile`, `.github/...`).
-3. View the final integration demo via the link in `Demo_Video.txt`.
+3. **🎥 Demo Video (5 min Screencast):** View the complete MLOps retraining, drift monitoring, and API inference run here: [MLOps Demo Video](https://www.loom.com/share/placeholder_bloc4_demo).
