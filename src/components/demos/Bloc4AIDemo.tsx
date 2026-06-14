@@ -11,11 +11,43 @@ export default function Bloc4AIDemo() {
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState<{ risk: number, isHigh: boolean } | null>(null);
 
-    const predict = () => {
+    const predict = async () => {
         setLoading(true);
+        setResult(null);
+        
+        // Define payload for real ML model prediction
+        const payload = {
+            days_for_shipping_real: delay + 5,
+            days_for_shipment_scheduled: 5,
+            shipping_mode: cost === 45 ? 'First Class' : 'Standard Class',
+            order_item_total: 1000.0,
+            eur_usd_rate: eurUsd
+        };
+        
+        try {
+            const response = await fetch('http://127.0.0.1:8000/predict-margin-risk', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                setResult({
+                    risk: data.risk_probability * 100, // convert 0-1 probability to %
+                    isHigh: data.risk_prediction === 1
+                });
+                setLoading(false);
+                return;
+            }
+        } catch (err) {
+            console.warn("FastAPI prediction failed or offline. Falling back to local simulation.", err);
+        }
+        
+        // Fallback simulation (in case backend uvicorn server is not running)
         setTimeout(() => {
-            // Mock RF algorithm
-            // High risk if eur drops low OR cost jumps to 45 (air freight)
             let baseRisk = 5;
             
             if (eurUsd < 1.05) baseRisk += 40;
@@ -29,7 +61,7 @@ export default function Bloc4AIDemo() {
 
             setResult({ risk: baseRisk, isHigh: baseRisk > 60 });
             setLoading(false);
-        }, 800);
+        }, 500);
     };
 
     return (

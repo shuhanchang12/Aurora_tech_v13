@@ -2,6 +2,7 @@ import os
 import joblib
 import pandas as pd
 from fastapi import Depends, FastAPI, Header, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 # Load the trained ML model & Label Encoder
@@ -21,6 +22,15 @@ app = FastAPI(
     title="AuroraTech Margin Prediction API (DataCo Adapted)",
     description="Endpoint for inferring financial risk of production delays based on bootstrapped DataCo supply chain dataset.",
     version="1.1.0"
+)
+
+# Enable CORS for frontend web server access
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Input data schema structure
