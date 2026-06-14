@@ -11,6 +11,7 @@ This module contains the Infrastructure as Code (IaC) and Data Architecture desi
 ## Directory Structure
 - `/docker`: Contains compose configurations (`docker-compose.yml`) and DDL initialization scripts (`init.sql`).
 - `/terraform`: AWS RDS infrastructure provisioning templates (`main.tf` etc).
+- `/data`: Contains validation sample datasets (`fx_sample.csv` etc) and their detailed schemas.
 - `/scripts`: Utility scripts for CI/CD automation (`deploy.sh`).
 
 ## How to Run & Deploy
