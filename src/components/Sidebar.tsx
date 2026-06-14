@@ -1,5 +1,5 @@
 import React from 'react';
-import { Database, ShieldCheck, Zap, BrainCircuit, LayoutDashboard, Share2, Briefcase, ChevronRight } from 'lucide-react';
+import { Database, ShieldCheck, Zap, BrainCircuit, LayoutDashboard, Share2, Briefcase, ChevronRight, Presentation } from 'lucide-react';
 import { motion } from 'motion/react';
 
 const Sidebar = ({ activeBloc, setActiveBloc }: { activeBloc: number, setActiveBloc: (id: number) => void }) => {
@@ -10,6 +10,7 @@ const Sidebar = ({ activeBloc, setActiveBloc }: { activeBloc: number, setActiveB
     { id: 2, title: 'Bloc 2: IT Infrastructure', icon: Database },
     { id: 3, title: 'Bloc 3: Global Procurement', icon: Zap },
     { id: 4, title: 'Bloc 4: AI Risk Engine', icon: BrainCircuit },
+    { id: 6, title: 'Oral Defense Slides', icon: Presentation },
   ];
 
   return (
