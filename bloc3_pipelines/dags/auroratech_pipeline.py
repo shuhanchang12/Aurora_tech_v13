@@ -31,6 +31,10 @@ def extract_shipping_logistics(**kwargs):
     print("Extracting shipping logistics from dataset/Electronic_sales_Sep2023-Sep2024.csv...")
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     csv_path = os.path.join(base_dir, "dataset", "Electronic_sales_Sep2023-Sep2024.csv")
+    if not os.path.exists(csv_path):
+        # Fallback to local dags/dataset directory (e.g. when running inside Docker container)
+        dags_dir = os.path.dirname(os.path.abspath(__file__))
+        csv_path = os.path.join(dags_dir, "dataset", "Electronic_sales_Sep2023-Sep2024.csv")
     
     with open(csv_path, mode="r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
@@ -89,6 +93,8 @@ def transform_and_load(**kwargs):
     
     import psycopg2
     db_host = os.getenv("DB_HOST", "localhost")
+    if db_host == "localhost" and os.path.exists("/.dockerenv"):
+        db_host = "host.docker.internal"
     db_port = os.getenv("DB_PORT", "5432")
     db_name = os.getenv("DB_NAME", "auroratech_dwh")
     db_user = os.getenv("DB_USER", "admin")
